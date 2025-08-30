@@ -16,8 +16,8 @@ import LibraryRegistrationForm from './components/LibraryRegistrationForm.vue'
   </main>
 </template>
 
-<style scoped>
-/* header {
+<style>
+header {
   line-height: 1.5;
 }
 
@@ -42,5 +42,5 @@ import LibraryRegistrationForm from './components/LibraryRegistrationForm.vue'
     place-items: flex-start;
     flex-wrap: wrap;
   }
-} */
+}
 </style>
