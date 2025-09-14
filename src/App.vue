@@ -5,14 +5,9 @@ import LibraryRegistrationForm from './components/LibraryRegistrationForm.vue'
 </script>
 
 <template>
-  <header>
-    <BHeader />
-  </header>
-
-  <main>
-    <!--LibraryRegistrationForm />-->
-    <!-- <JSONLab /> -->
-     <router-view></router-view>
+  <BHeader />
+  <main class="container py-4">
+    <router-view />
   </main>
 </template>
 
