@@ -35,14 +35,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { getFirestore, doc, getDoc } from "firebase/firestore"
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth"
 
 const router = useRouter()
 const auth = getAuth()
-const db = getFirestore()
 
 const email = ref("")
 const password = ref("")
@@ -51,43 +49,49 @@ const buttonText = ref("Sign in")
 const debugUser = ref("")
 const notice = ref("")
 const noticeType = ref("info")
+const userRole = ref("")
 
 const noticeClass = computed(() =>
-  noticeType.value === "success"
-    ? "alert alert-success"
-    : noticeType.value === "error"
-    ? "alert alert-danger"
-    : "alert alert-info"
+  noticeType.value === "success" ? "alert alert-success"
+  : noticeType.value === "error" ? "alert alert-danger"
+  : "alert alert-info"
 )
+
+onMounted(() => {
+  onAuthStateChanged(auth, (u) => {
+    console.log("[AuthStateChanged] currentUser:", u)
+  })
+})
 
 const onSignin = async () => {
   loading.value = true
   buttonText.value = "Signing in..."
   notice.value = ""
   debugUser.value = ""
+  userRole.value = ""
   try {
     const cred = await signInWithEmailAndPassword(auth, email.value, password.value)
-    let role = "unknown"
-    try {
-      const snap = await getDoc(doc(db, "users", cred.user.uid))
-      if (snap.exists()) role = snap.data().role
-    } catch (_) {}
+    const role = cred.user.displayName || "unknown"
+    userRole.value = role
+    console.log("role:", role)
+
     debugUser.value = JSON.stringify(
       { email: cred.user.email, uid: cred.user.uid, role, metadata: cred.user.metadata },
-      null,
-      2
+      null, 2
     )
     noticeType.value = "success"
     notice.value = `Signed in as ${cred.user.email} (role: ${role})`
+
     buttonText.value = "Login successful"
     setTimeout(async () => {
       loading.value = false
       buttonText.value = "Sign in"
       await router.push("/")
-    }, 1200)
+    }, 1000)
   } catch (e) {
     noticeType.value = "error"
     notice.value = `Sign-in failed: ${e.code || e.message}`
+    console.error("[SignIn] error:", e)
     loading.value = false
     buttonText.value = "Sign in"
   }

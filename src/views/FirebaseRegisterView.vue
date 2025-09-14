@@ -49,12 +49,10 @@
 <script setup>
 import { ref, computed } from "vue"
 import { useRouter } from "vue-router"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
-import { getFirestore, doc, setDoc } from "firebase/firestore"
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 
 const router = useRouter()
 const auth = getAuth()
-const db = getFirestore()
 
 const email = ref("")
 const password = ref("")
@@ -65,7 +63,8 @@ const loading = ref(false)
 const errors = ref({ email: null, password: null, confirm: null })
 const notice = ref("")
 const noticeType = ref("info")
-const noticeClass = computed(() => noticeType.value === "success" ? "alert alert-success" : noticeType.value === "error" ? "alert alert-danger" : "alert alert-info")
+const noticeClass = computed(() => 
+noticeType.value === "success" ? "alert alert-success" : noticeType.value === "error" ? "alert alert-danger" : "alert alert-info")
 
 const validate = () => {
   errors.value.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) ? null : "Please enter a valid email."
@@ -89,7 +88,7 @@ const onSubmit = async () => {
   notice.value = ""
   try {
     const cred = await createUserWithEmailAndPassword(auth, email.value, password.value)
-    await setDoc(doc(db, "users", cred.user.uid), { uid: cred.user.uid, email: email.value, role: role.value, createdAt: new Date().toISOString() })
+    await updateProfile(cred.user, { displayName: role.value })
     noticeType.value = "success"
     notice.value = "Registration successful. You can now sign in."
     loading.value = false
