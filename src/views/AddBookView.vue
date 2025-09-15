@@ -28,7 +28,35 @@
           <div v-if="notice" class="mt-3" :class="noticeClass">{{ notice }}</div>
         </form>
 
-        <BookList class="mt-4" />
+        <div class="mt-4">
+          <BookList title="All Books (live)" />
+        </div>
+
+        <div class="mt-5">
+          <BookList
+            title="Query: ISBN &gt; 1000 (where)"
+            where-field="isbn"
+            where-op=">"
+            :where-value="1000"
+          />
+        </div>
+
+        <div class="mt-4">
+          <BookList
+            title="Query: orderBy name ASC"
+            order-by-field="name"
+            order-direction="asc"
+          />
+        </div>
+
+        <div class="mt-4">
+          <BookList
+            title="Query: Top 2 by ISBN DESC (orderBy + limit)"
+            order-by-field="isbn"
+            order-direction="desc"
+            :limit-count="2"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -46,9 +74,13 @@ const loading = ref(false)
 const notice = ref('')
 const noticeType = ref('info')
 const errors = ref({ isbn: null, name: null })
+
 const noticeClass = computed(() =>
-  noticeType.value === 'success' ? 'alert alert-success' :
-  noticeType.value === 'error' ? 'alert alert-danger' : 'alert alert-info'
+  noticeType.value === 'success'
+    ? 'alert alert-success'
+    : noticeType.value === 'error'
+    ? 'alert alert-danger'
+    : 'alert alert-info'
 )
 
 const validate = () => {
