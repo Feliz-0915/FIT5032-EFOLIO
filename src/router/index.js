@@ -5,6 +5,7 @@ import FirebaseSigninView from '../views/FirebaseSigninView.vue'
 import FirebaseRegisterView from '../views/FirebaseRegisterView.vue'
 import FirebaseLogoutView from '../views/FirebaseLogoutView.vue'
 import AddBookView from '../views/AddBookView.vue'
+import GetBookCountView from '../views/GetBookCountView.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: HomeView },
@@ -13,7 +14,8 @@ const routes = [
   { path: '/FireRegister', name: 'FireRegister', component: FirebaseRegisterView, alias: ['/fireregister', '/register'] },
   { path: '/Logout', name: 'Logout', component: FirebaseLogoutView, alias: ['/logout'] },
   { path: '/addbook', name: 'AddBook', component: AddBookView, alias: ['/AddBook', '/addBook'] },
-  { path: '/:pathMatch(.*)*', redirect: '/' }
+  { path: '/:pathMatch(.*)*', redirect: '/' },
+  { path: '/GetBookCount', name: 'GetBookCount', component: GetBookCountView}
 ]
 
 const router = createRouter({

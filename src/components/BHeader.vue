@@ -8,6 +8,7 @@
         <li class="nav-item"><router-link to="/FireRegister" class="nav-link" active-class="active">Firebase Register</router-link></li>
         <li class="nav-item"><router-link to="/Logout" class="nav-link" active-class="active">Logout</router-link></li>
         <li class="nav-item"><router-link to="/addbook" class="nav-link" active-class="active">Add Book</router-link></li>
+        <li class="nav-item"><router-link to="/GetBookCount" class="nav-link" active-class="active">Get Book Count</router-link></li>
         <li class="nav-item ms-3 align-self-center text-muted">
           <small v-if="userEmail">Signed in as {{ userEmail }}</small>
           <small v-else>Not signed in</small>
